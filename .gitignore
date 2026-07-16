@@ -1,0 +1,27 @@
+# Corpus and derived data — never committed
+data/*
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# DuckDB / local databases
+*.duckdb
+*.duckdb.wal
+
+# Secrets and local config
+.env
+config.yaml
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
