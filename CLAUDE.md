@@ -8,8 +8,16 @@ Read `README.md` for the full picture. Current phase: **0 — eval harness + dat
 These were verified against live endpoints before the project started. Do not rediscover
 them the hard way:
 
-1. **Award lag is 5–18 months.** Any backtest or outcome-labeled dataset must draw from
-   tenders published 2024 or earlier, or the answer key doesn't exist yet.
+1. **Backtest window is bounded on BOTH ends — 2024-H2 to ~2025-H1.** Two forces pull
+   opposite ways and the usable window is their intersection (verified live 2026-07,
+   see `docs/findings/ted-eforms-boundary.md`):
+   - *Award lag 5–18 months* wants OLD tenders so the award already exists.
+   - *eForms schema boundary* wants NEW tenders: TED's structured API only projects
+     eForms fields, and Spanish notices only carry `procedure-identifier` (and award
+     `winner-name`/`tender-value`) from ~2024-H2 onward. 2023 and 2024-H1 notices return
+     these fields empty — legacy schema, unusable for structured linkage.
+   Net: draw backtest tenders from **2024-H2 onward**, old enough that their awards have
+   landed. This widens over time. Do NOT reach back to 2023/early-2024 for linked data.
 2. **`clos-nw` ≠ missing award notice.** "Closed without a winner" (*desierto*) is a real
    negative label. "No award notice found" means *not yet published* — unknown, not
    negative. Conflating them corrupts the negative class. Keep three states everywhere:
