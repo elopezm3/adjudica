@@ -27,15 +27,36 @@ chosen because it provides what most AI portfolio projects lack:
 
 ## Architecture (phased, eval-first)
 
-| Phase | Deliverable | Ground truth |
-|-------|-------------|--------------|
-| 0 | Eval harness + data spine (TED/PLACSP 2023–2024 → DuckDB) | eForms XML fields |
-| 1 | Extraction pipeline over messy documents (OCR fallback) | Phase 0 harness, per field |
-| 2 | MCP server + qualification sub-agent | Eligibility vs. stated tender rules |
-| 3 | Outcome-grounded backtest | Award notices (independent) |
-| 4 | Engagement write-up + walkthrough | — |
+| Phase | Deliverable | Ground truth | State |
+|-------|-------------|--------------|-------|
+| 0 | Data spine: TED + PLACSP → DuckDB, tender→award resolver | — | ✅ |
+| 1 | Extraction from pliego PDFs + extraction eval harness | CODICE/eForms XML | ✅ built · live run needs an API key |
+| 2 | MCP server + qualification (profile, eligibility rules) | Stated tender rules | ✅ |
+| 3 | Outcome backtest harness (vs. majority baseline) | Award notices | ✅ harness · predictor needs an API key |
+| 4 | Engagement write-up | — | ✅ [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md) |
 
-The eval harness is built **before** the agent. That ordering is the project's thesis.
+In every phase the eval harness is built **before** the thing it measures. That ordering is
+the project's thesis, and [the write-up](docs/CASE_STUDY.md) explains what it caught.
+
+## Using it
+
+The MCP server is the product surface — connect it to Claude Desktop and ask in plain
+language. It needs no Anthropic API key; Claude is the client.
+
+```bash
+uv sync --all-groups
+uv run python -m adjudica.placsp.ingest --max 400     # load live Spanish tenders
+```
+
+```jsonc
+// claude_desktop_config.json
+{"mcpServers": {"adjudica": {
+  "command": "uv",
+  "args": ["run", "--directory", "/path/to/adjudica", "python", "-m", "adjudica.mcp_server.server"]
+}}}
+```
+
+Tools: `search_tenders`, `get_tender`, `check_tender_eligibility`, `past_awards_for_cpv`.
 
 ## Data sources
 
@@ -55,4 +76,9 @@ uv run ruff check .    # lint
 
 ## Status
 
-Phase 0 — scaffold. Nothing works yet; this README describes the destination.
+All four phases are built. 93 offline tests, CI green. Verified against live sources:
+TED's API contract, the PLACSP feed and CODICE schema, and a real 3.7 MB pliego download.
+
+The one thing outstanding is running the two predictors (extraction and outcome judgment)
+against real data, which needs Anthropic API billing. The harnesses that will grade them
+are done — deliberately, since building the ruler first is the point.
