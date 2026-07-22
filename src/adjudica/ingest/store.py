@@ -59,8 +59,13 @@ _COLUMNS = (
 def connect(path: str | Path = ":memory:") -> duckdb.DuckDBPyConnection:
     """Open a DuckDB connection and ensure the schema exists."""
     con = duckdb.connect(str(path))
-    con.execute(_SCHEMA)
+    ensure_schema(con)
     return con
+
+
+def ensure_schema(con: duckdb.DuckDBPyConnection) -> None:
+    """Create the notices table if absent. Idempotent; safe on a shared connection."""
+    con.execute(_SCHEMA)
 
 
 def _row(rec: NoticeRecord) -> tuple:
