@@ -27,6 +27,15 @@ PREFERRED_LANGS = ("spa", "eng")
 EXTRACT_MODEL = "claude-opus-4-8"
 EXTRACT_MAX_TOKENS = 1024
 
+# USD per 1M tokens, for the --estimate cost projection. From the published price list;
+# re-check before quoting figures, since pricing changes. Output cost is negligible here
+# (we ask for a handful of structured fields), so only input rates matter in practice.
+MODEL_PRICES_USD_PER_MTOK: dict[str, dict[str, float]] = {
+    "claude-opus-4-8": {"input": 5.00, "output": 25.00},
+    "claude-sonnet-5": {"input": 3.00, "output": 15.00},
+    "claude-haiku-4-5": {"input": 1.00, "output": 5.00},
+}
+
 # The eForms fields we ingest. All verified to populate on 2024-H2+ Spanish notices.
 # See docs/findings/ted-eforms-boundary.md for why only eForms notices are in scope.
 TED_FIELDS = (

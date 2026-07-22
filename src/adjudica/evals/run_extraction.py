@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
+from adjudica.config import EXTRACT_MODEL
 from adjudica.evals.extraction import Scorecard, score
 from adjudica.extract.extractor import ExtractionError, UnsupportedDocumentError, extract_from_pdf
 from adjudica.extract.schema import ExtractedFields
@@ -20,12 +21,13 @@ def evaluate_documents(
     items: Iterable[tuple[bytes, NoticeRecord]],
     *,
     client,
+    model: str = EXTRACT_MODEL,
 ) -> Scorecard:
     """Extract + grade each (pdf_bytes, tender) pair; return the aggregate Scorecard."""
     pairs: list[tuple[ExtractedFields, NoticeRecord]] = []
     for pdf_bytes, truth in items:
         try:
-            extracted = extract_from_pdf(pdf_bytes, client=client)
+            extracted = extract_from_pdf(pdf_bytes, client=client, model=model)
         except (ExtractionError, UnsupportedDocumentError):
             extracted = ExtractedFields()  # unreadable -> empty -> counts as all-missed
         pairs.append((extracted, truth))
