@@ -13,6 +13,12 @@ TED_MIN_REQUEST_INTERVAL_S = 0.5  # ~120 req/min, well under the limit and gentl
 # Preferred languages for multilingual fields, in order. Spanish first, English fallback.
 PREFERRED_LANGS = ("spa", "eng")
 
+# Model for document field extraction (Phase 1). Claude reads PDFs natively — scanned or
+# text-layer — so no OCR pipeline is needed. This is the tunable knob if cost/latency of a
+# full-corpus run argues for a smaller model; default to the most capable.
+EXTRACT_MODEL = "claude-opus-4-8"
+EXTRACT_MAX_TOKENS = 1024
+
 # The eForms fields we ingest. All verified to populate on 2024-H2+ Spanish notices.
 # See docs/findings/ted-eforms-boundary.md for why only eForms notices are in scope.
 TED_FIELDS = (
