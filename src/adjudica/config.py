@@ -4,6 +4,14 @@ from __future__ import annotations
 
 TED_SEARCH_URL = "https://api.ted.europa.eu/v3/notices/search"
 
+# PLACSP open-data ATOM syndication (Phase 1 document source). Sanctioned endpoint —
+# constraint 3 forbids crawling the portal; this feed exists for reuse. Each entry's CODICE
+# XML carries structured fields (ground truth) AND direct pliego links (GetDocumentByIdServlet).
+PLACSP_FEED_URL = (
+    "https://contrataciondelestado.es/sindicacion/sindicacion_643/"
+    "licitacionesPerfilesContratanteCompleto3.atom"
+)
+
 # TED documented rate limits: 600/IP/6min, 700/min, 3 concurrent. We observed a 429
 # during tight backfill loops, so we also throttle proactively to this interval.
 TED_MAX_PAGE_SIZE = 250
