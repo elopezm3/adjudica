@@ -30,6 +30,15 @@ Del documento adjunto, extrae únicamente estos campos:
   Si no aparece, null.
 - deadline: la fecha límite de presentación de ofertas, en formato YYYY-MM-DD. Si no
   aparece, null.
+- solvency_turnover_required: el volumen anual de negocios mínimo exigido como solvencia
+  económica y financiera, como número en euros. Si no se exige, null.
+- required_certifications: lista de certificaciones o clasificaciones exigidas
+  (p. ej. "ISO 9001", "Clasificación O-6-2"). Si no se exige ninguna, lista vacía.
+- price_weight_pct: el peso del precio en los criterios de adjudicación, de 0 a 100.
+  Si los criterios dan 60 puntos al precio sobre 100 totales, devuelve 60. Si no
+  aparece, null.
+- lots: número de lotes en que se divide el contrato. Si no se divide, 1. Si no
+  aparece, null.
 
 Extrae solo lo que está escrito en el documento. No inventes ni estimes valores.
 Si un campo no está presente, devuelve null para ese campo."""
